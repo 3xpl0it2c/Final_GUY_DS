@@ -1,6 +1,7 @@
 unsigned long hash(unsigned long id, int arraySize) {
 		// Starting point.
         unsigned long hash = 5381;
+		unsigned long digit;
 
         while (id != 0) {
 			digit = id % 10;
