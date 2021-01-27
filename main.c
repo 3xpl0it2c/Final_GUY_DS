@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "student.h"
 #include "binTree.h"
 #include "hash.h"

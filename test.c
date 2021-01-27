@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "hash.c"
+#include "hash.h"
 
 void testHashFunc(void) {
 	unsigned long testID = 123456789;
