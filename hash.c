@@ -1,5 +1,5 @@
 unsigned long hash(unsigned long id, int arraySize) {
-	// Starting point.
+	// Given an id number and a size limit, generate an index for use inside an array.
 	unsigned long hash = 5381;
 	unsigned long digit;
 
