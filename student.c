@@ -3,8 +3,7 @@
 #include "student.h"
 #include "hash.h"
 
-extern const int STUDENT_MAP_SIZE;
-extern bnode_t* students[STUDENT_MAP_SIZE];
+extern bnode_t* students[];
 
 student_t* newStudent(unsigned long studentID) {
 	// Allocate memory for a new student.
@@ -14,22 +13,31 @@ student_t* newStudent(unsigned long studentID) {
 	student->courses = NULL;
 	student->heapPosition = -1;
 	student->coursesNum = 0;
-	
+
 	return student;
+}
+
+stdavg_t* newStudentAverage(double average, unsigned long id) {
+	struct StudentAverage* sa = malloc(sizeof(stdavg_t));
+
+	sa->data = average;
+	sa->id = id;
+
+	return sa;
 }
 
 student_t* getStudent(unsigned long id) {
 	int studentPos = hash(id, STUDENT_MAP_SIZE);
-	bnode_t* student = students[studentPos];
+	bnode_t* studentBNode = students[studentPos];
 
-	if(!student) return NULL;
+	if(!studentBNode) return NULL;
 
-	return student->key;
+	return studentBNode->key;
 }
 
 double getAverage(student_t* st) {
 	double gradesSummary = 0;
-	int amountOfCourses = st->coursesNum;
+	double amountOfCourses = (double)st->coursesNum;
 	course_t* courses = st->courses->data;
 
 	for(int i = 0; i < amountOfCourses; i++) {
