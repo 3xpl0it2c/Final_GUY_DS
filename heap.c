@@ -1,11 +1,25 @@
 #include <stdlib.h>
 #include "heap.h"
 #include "student.h"
-#include "student.c"
 
 #define heapRight(i) ((i * 2) + 2)
 #define heapLeft(i) ((i * 2) + 1)
 #define heapParent(i) ((i - 1) / 2)
+
+void freeHeap(heap_t* h) {
+	for (int i = 0; i < h->size; i++) {
+		free(h->data[i]);
+	}
+
+	free(h->data);
+	free(h);
+}
+
+void initHeap(heap_t* h, int capacity) {
+	h->data = calloc(sizeof(stdavg_t*), capacity);
+	h->capacity = capacity;
+	h->size = 0;
+}
 
 void updateHeapPos(unsigned long id, int newHeapPos) {
 	struct Student* s = getStudent(id);

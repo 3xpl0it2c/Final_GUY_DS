@@ -1,11 +1,12 @@
 #include <stdlib.h>
 
+const int STUDENT_MAP_SIZE = 17;
+
 #include "student.h"
 #include "binTree.h"
 #include "hash.h"
 #include "heap.h"
 
-#define STUDENT_MAP_SIZE 17
 bnode_t* students[STUDENT_MAP_SIZE];
 
 heap_t* avgHeap;

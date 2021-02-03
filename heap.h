@@ -1,3 +1,4 @@
+#pragma once
 #include "student.h"
 
 struct Heap {

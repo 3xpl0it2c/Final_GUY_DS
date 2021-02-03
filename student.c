@@ -3,6 +3,7 @@
 #include "student.h"
 #include "hash.h"
 
+extern int STUDENT_MAP_SIZE;
 extern bnode_t* students[];
 
 student_t* newStudent(unsigned long studentID) {
