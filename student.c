@@ -48,3 +48,4 @@ double getAverage(student_t* st) {
 
 	return gradesSummary / amountOfCourses;
 }
+

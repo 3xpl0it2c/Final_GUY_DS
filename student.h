@@ -7,7 +7,7 @@ struct Course {
 
 struct CourseArray {
 	unsigned int totalSize;
-	struct Course* data;
+	struct Course** data;
 };
 
 struct Student {

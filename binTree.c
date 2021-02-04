@@ -12,16 +12,25 @@ bnode_t* newBNode(student_t* st) {
 }
 
 void insertIntoTree(bnode_t* root, student_t* value) {
-	double rootAvg = getAverage(root->key);
-	double keyAvg = getAverage(value);
+	unsigned long rootID = root->key->id;
 
-	if (rootAvg > keyAvg) {
+	if (rootID > value->id) {
 		if (root->right != NULL) return insertIntoTree(root->right, value);
 		root->right = newBNode(value);
 	}
 
-	if (rootAvg < keyAvg) {
+	if (rootID < value->id) {
 		if (root->left != NULL) return insertIntoTree(root->left, value);
 		root->left = newBNode(value);
 	}
+}
+
+student_t* findInTree(bnode_t* root, student_t* target) {
+	if (root == NULL) return NULL;
+
+	student_t* currentStudent = root->key;
+
+	if (currentStudent->id == target->id) { return currentStudent; }
+	else if (currentStudent->id > target->id) { return findInTree(root->right, target); }
+	else { return findInTree(root->left, target); }
 }
