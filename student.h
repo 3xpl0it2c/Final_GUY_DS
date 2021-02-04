@@ -28,7 +28,7 @@ typedef struct Student student_t;
 typedef struct StudentAverage stdavg_t;
 
 student_t* newStudent(unsigned long);
-stdavg_t* newStudentAverage(double, unsigned long);
-
 student_t* getStudent(unsigned long id);
+stdavg_t* newStudentAverage(double, unsigned long);
 double getAverage(student_t*);
+void printStudent(student_t*);

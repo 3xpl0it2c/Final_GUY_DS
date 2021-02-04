@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 const int STUDENT_MAP_SIZE = 17;
@@ -29,10 +30,13 @@ void updateStudent(struct Student* st) {
 }
 
 int main(void) {
+	struct Student* s1 = newStudent(12345678);
 	avgHeap = malloc(sizeof(heap_t));
 
 	for (int i = 0; i < STUDENT_MAP_SIZE; i++)
 		students[i] = NULL;
+
+	printStudent(s1);
 
 	return 0;
 }
