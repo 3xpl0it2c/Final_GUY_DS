@@ -3,6 +3,7 @@
 
 const int STUDENT_MAP_SIZE = 17;
 
+#include "course.h"
 #include "student.h"
 #include "binTree.h"
 #include "hash.h"
@@ -31,10 +32,17 @@ void updateStudent(struct Student* st) {
 
 int main(void) {
 	struct Student* s1 = newStudent(12345678);
+	struct Course* csCoruse = newCourse(1234, 82);
+
 	avgHeap = malloc(sizeof(heap_t));
 
 	for (int i = 0; i < STUDENT_MAP_SIZE; i++)
 		students[i] = NULL;
+
+	printStudent(s1);
+
+	insertStudent(s1);
+	addCourse(s1, csCoruse);
 
 	printStudent(s1);
 

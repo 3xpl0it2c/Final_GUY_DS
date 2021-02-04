@@ -1,8 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "bool.h"
 #include "student.h"
 #include "binTree.h"
 #include "hash.h"
-#include <stdio.h>
-#include <stdlib.h>
+
+#define MAX_GRADE 100
+#define MIN_GRADE 0
 
 extern int STUDENT_MAP_SIZE;
 extern bnode_t *students[];
@@ -19,6 +24,17 @@ student_t *newStudent(unsigned long studentID) {
   student->coursesNum = 0;
 
   return student;
+}
+
+course_t* newCourse(unsigned int id, int grade) {
+	// Can't have a course with a grade of 300 or -200 right ?
+	if (grade <= MIN_GRADE && grade > MAX_GRADE) return NULL;
+
+	course_t* c = malloc(sizeof(course_t));
+	c->id = id;
+	c->grade = grade;
+
+	return c;
 }
 
 stdavg_t *newStudentAverage(double average, unsigned long id) {
@@ -53,6 +69,37 @@ double getAverage(student_t *st) {
   return gradesSummary / amountOfCourses;
 }
 
+
+
+void addCourse(student_t* s, course_t* c) {
+	// Assign a course to a student
+	array_course* courses = s->courses;
+
+	if(s->coursesNum < courses->totalSize) {
+		int newSize = courses->totalSize * 2;
+		courses->data = realloc(courses->data, newSize);
+		courses->totalSize = newSize;
+	}
+
+	s->coursesNum++;
+	courses->data[s->coursesNum] = c;
+}
+
+int changeGrade(unsigned long stID, course_t* c) {
+	course_t* tmp;
+	struct Student* st = getStudent(stID);
+	int numOfCourses = st->coursesNum;
+
+	for (int i = 0; i < numOfCourses; i++) {
+		tmp = st->courses->data[i];
+		if (tmp->id == c->id) {
+			tmp->grade = c->grade;
+			return true;
+		}
+	}
+
+	return false;
+}
 void printCourse(course_t *c) {
   printf("Course ID: %d\n", c->id);
   printf("Course Grade: %d\n", c->grade);
