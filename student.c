@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "bool.h"
-#include "student.h"
 #include "binTree.h"
+#include "bool.h"
 #include "hash.h"
+#include "student.h"
 
 #define MAX_GRADE 100
 #define MIN_GRADE 0
@@ -26,15 +26,16 @@ student_t *newStudent(unsigned long studentID) {
   return student;
 }
 
-course_t* newCourse(unsigned int id, int grade) {
-	// Can't have a course with a grade of 300 or -200 right ?
-	if (grade <= MIN_GRADE && grade > MAX_GRADE) return NULL;
+course_t *newCourse(unsigned int id, int grade) {
+  // Can't have a course with a grade of 300 or -200, right ?
+  if (grade <= MIN_GRADE && grade > MAX_GRADE)
+    return NULL;
 
-	course_t* c = malloc(sizeof(course_t));
-	c->id = id;
-	c->grade = grade;
+  course_t *c = malloc(sizeof(course_t));
+  c->id = id;
+  c->grade = grade;
 
-	return c;
+  return c;
 }
 
 stdavg_t *newStudentAverage(double average, unsigned long id) {
@@ -47,19 +48,23 @@ stdavg_t *newStudentAverage(double average, unsigned long id) {
 }
 
 student_t *getStudent(unsigned long id) {
+  // Find a student in the HashMap of BSTs.
   int studentPos = hash(id, STUDENT_MAP_SIZE);
   bnode_t *studentBNode = students[studentPos];
 
   if (!studentBNode)
     return NULL;
 
-  return studentBNode->key;
+  return findInTree(studentBNode, id);
 }
 
 double getAverage(student_t *st) {
-  double gradesSummary = 0;
-  double amountOfCourses = (double)st->coursesNum;
+  // Calculate the average of a student
+  double gradesSummary = 0.0;
+  int amountOfCourses = st->coursesNum;
   course_t **courses = st->courses->data;
+
+  if (amountOfCourses <= 0) return gradesSummary;
 
   for (int i = 0; i < amountOfCourses; i++) {
     course_t *tmp = courses[i];
@@ -69,37 +74,37 @@ double getAverage(student_t *st) {
   return gradesSummary / amountOfCourses;
 }
 
+void addCourse(student_t *s, course_t *c) {
+  // Assign a course to a student
+  const int REALLOC_STEP = 10;
+  array_course *courses = s->courses;
 
+  if (s->coursesNum < (courses->totalSize - 1)) {
+    int newSize = courses->totalSize + REALLOC_STEP;
+    courses->data = realloc(courses->data, newSize);
+    courses->totalSize = newSize;
+  }
 
-void addCourse(student_t* s, course_t* c) {
-	// Assign a course to a student
-	array_course* courses = s->courses;
-
-	if(s->coursesNum < courses->totalSize) {
-		int newSize = courses->totalSize * 2;
-		courses->data = realloc(courses->data, newSize);
-		courses->totalSize = newSize;
-	}
-
-	s->coursesNum++;
-	courses->data[s->coursesNum] = c;
+  courses->data[s->coursesNum] = c;
+  s->coursesNum++;
 }
 
-int changeGrade(unsigned long stID, course_t* c) {
-	course_t* tmp;
-	struct Student* st = getStudent(stID);
-	int numOfCourses = st->coursesNum;
+int changeGrade(unsigned long stID, course_t *c) {
+  course_t *tmp;
+  struct Student *st = getStudent(stID);
+  int numOfCourses = st->coursesNum;
 
-	for (int i = 0; i < numOfCourses; i++) {
-		tmp = st->courses->data[i];
-		if (tmp->id == c->id) {
-			tmp->grade = c->grade;
-			return true;
-		}
-	}
+  for (int i = 0; i < numOfCourses; i++) {
+    tmp = st->courses->data[i];
+    if (tmp->id == c->id) {
+      tmp->grade = c->grade;
+      return true;
+    }
+  }
 
-	return false;
+  return false;
 }
+
 void printCourse(course_t *c) {
   printf("Course ID: %d\n", c->id);
   printf("Course Grade: %d\n", c->grade);
@@ -113,7 +118,7 @@ void printStudent(student_t *st) {
   if (st->courses->totalSize == 0) {
     printf("No Courses !\n");
   } else {
-    for (int i = 0; i < st->courses->totalSize; i++) {
+    for (int i = 0; i < st->coursesNum; i++) {
       printCourse(st->courses->data[i]);
     }
   }
