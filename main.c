@@ -60,6 +60,32 @@ void milga(void) {
   }
 }
 
+int getCourseGradeFromStudent(unsigned long id, int courseID) {
+  const int failSafe = 0;
+  struct Student *st = getStudent(id);
+
+  for (int i = 0; i < st->coursesNum; i++) {
+    if (st->courses->data[i]->id == courseID)
+      return st->courses->data[i]->grade;
+  }
+
+  return failSafe;
+}
+
+double courseAvg(int courseID, unsigned long stIDs[], int size) {
+  double gradesSummary = 0.0;
+
+  for (int i = 0; i < size; i++) {
+    gradesSummary += getCourseGradeFromStudent(stIDs[i], courseID);
+  }
+
+  double output = gradesSummary / size;
+
+  printf("Course %d average is: %lf", courseID, output);
+
+  return output;
+}
+
 int main(void) {
   srand(time(NULL));
   avgHeap = initHeap(avgHeap, STUDENT_MAP_SIZE);
