@@ -147,13 +147,13 @@ void heapUpdate(heap_t *heap, student_t *student, double newValue) {
     heapifyDown(heap, studentAvgIndex);
 }
 
-// For debugging, mainly.
 void printStdAvg(stdavg_t *avg) {
   printf("Average for student with id: %lu\n", avg->id);
   printf("Average: %lf\n", avg->data);
 }
 
 void printHeap(heap_t *heap) {
+  printf("Printing Heap:\n");
   for (int i = 0; i < heap->size; i++) {
     printStdAvg(heap->data[i]);
   }

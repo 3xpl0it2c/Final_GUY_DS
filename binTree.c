@@ -41,3 +41,13 @@ student_t *findInTree(bnode_t *root, unsigned long targetID) {
     return findInTree(root->left, targetID);
   }
 }
+
+void printTree(bnode_t *root) {
+  if (root == NULL)
+    return;
+
+  printStudent(root->key);
+
+  printTree(root->left);
+  printTree(root->right);
+}

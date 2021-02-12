@@ -12,3 +12,4 @@ typedef struct BNode bnode_t;
 bnode_t *newBNode(student_t *);
 void insertIntoTree(bnode_t *, student_t *);
 student_t *findInTree(bnode_t *, unsigned long);
+void printTree(bnode_t *);
