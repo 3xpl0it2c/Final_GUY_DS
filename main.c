@@ -13,6 +13,7 @@ const int STUDENT_MAP_SIZE = 17;
 #define RANDOM_ID                                                              \
   abs((100000000 + 2 * 3 * 4 * 5 * 6 * 7 * rand()) % (1000000000))
 #define MAX_COURSES_PER_STUDENT 8
+#define AMOUNT_OF_STUDENTS_FOR_MILGA 5
 
 #ifndef MAX_GRADE
 #define MAX_GRADE 100
@@ -49,9 +50,21 @@ void addCoursesRandomly(student_t *st) {
   }
 }
 
+void milga(void) {
+  for (int i = 0; i < AMOUNT_OF_STUDENTS_FOR_MILGA; i++) {
+    struct StudentAverage *stAvg = heapExtractMax(avgHeap);
+    struct Student *st = getStudent(stAvg->id);
+    st->heapPosition = -1;
+
+    printStudent(st);
+  }
+}
+
 int main(void) {
   srand(time(NULL));
   avgHeap = initHeap(avgHeap, STUDENT_MAP_SIZE);
+  const char randomStudentIDMsg[] = "Chose random student with ID: %lu";
+  const char scholarshipMsg[] = "Printing %d students for scholarship:\n";
   // Decrement 2 since the teacher told so.
   int randomStudentIndex = rand() % (STUDENT_MAP_SIZE - 2);
   student_t *randomStudent = NULL;
@@ -69,7 +82,7 @@ int main(void) {
 
   printHeap(avgHeap);
 
-  printf("Chose random student with ID: %lu", randomStudent->id);
+  printf(randomStudentIDMsg, randomStudent->id);
 
   int randomCourseIndex = rand() % randomStudent->coursesNum;
   struct Course *randomCourse = randomStudent->courses->data[randomCourseIndex];
@@ -83,6 +96,12 @@ int main(void) {
   }
 
   printHeap(avgHeap);
+
+  printf(scholarshipMsg, AMOUNT_OF_STUDENTS_FOR_MILGA);
+  milga();
+
+  printf(scholarshipMsg, AMOUNT_OF_STUDENTS_FOR_MILGA);
+  milga();
 
   return 0;
 }

@@ -16,3 +16,4 @@ void updateHeapPos(unsigned long, int);
 heap_t *initHeap(heap_t *, int);
 void printStdAvg(stdavg_t *);
 void printHeap(heap_t *);
+stdavg_t *heapExtractMax(heap_t *);

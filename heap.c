@@ -147,6 +147,21 @@ void heapUpdate(heap_t *heap, student_t *student, double newValue) {
     heapifyDown(heap, studentAvgIndex);
 }
 
+stdavg_t *heapExtractMax(heap_t *heap) {
+  if (!heap->size)
+    return NULL;
+
+  struct StudentAverage *output = heap->data[0];
+  struct StudentAverage *lastElement = heap->data[(heap->size - 1)];
+
+  heap->data[0] = lastElement;
+  heap->size--;
+
+  heapifyDown(heap, 0);
+
+  return output;
+}
+
 void printStdAvg(stdavg_t *avg) {
   printf("Average for student with id: %lu\n", avg->id);
   printf("Average: %lf\n", avg->data);
