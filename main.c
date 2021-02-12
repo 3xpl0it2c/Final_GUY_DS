@@ -15,7 +15,7 @@ heap_t *avgHeap = NULL;
 
 void insertStudent(struct Student *st) {
   unsigned long studentPosition = hash(st->id, STUDENT_MAP_SIZE);
-  double calculatedAvg = getAverage(st);
+  double calculatedAvg = calcAverage(st);
   struct StudentAverage *stAvg = newStudentAverage(calculatedAvg, st->id);
 
   if (students[studentPosition] != NULL)
@@ -40,7 +40,7 @@ void addCourse(student_t *st, course_t *c) {
   courses->data[st->coursesNum] = c;
   st->coursesNum++;
 
-  double newAverage = getAverage(st);
+  double newAverage = calcAverage(st);
 
   heapUpdate(avgHeap, st, newAverage);
 }
@@ -55,7 +55,7 @@ int changeGrade(unsigned long stID, course_t *c, int newGrade) {
     tmp = st->courses->data[i];
     if (tmp->id == c->id) {
       tmp->grade = newGrade;
-      double newAverage = getAverage(st);
+      double newAverage = calcAverage(st);
 
       heapUpdate(avgHeap, st, newAverage);
       return true;

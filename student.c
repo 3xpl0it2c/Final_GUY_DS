@@ -57,7 +57,7 @@ student_t *getStudent(unsigned long id) {
   return findInTree(studentBNode, id);
 }
 
-double getAverage(student_t *st) {
+double calcAverage(student_t *st) {
   // Calculate the average of a student
   double gradesSummary = 0.0;
   int amountOfCourses = st->coursesNum;

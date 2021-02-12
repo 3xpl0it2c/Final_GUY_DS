@@ -32,5 +32,5 @@ student_t *getStudent(unsigned long id);
 course_t *newCourse(unsigned int, int);
 stdavg_t *newStudentAverage(double, unsigned long);
 
-double getAverage(student_t *);
+double calcAverage(student_t *);
 void printStudent(student_t *);
