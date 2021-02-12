@@ -28,9 +28,11 @@ typedef struct Student student_t;
 typedef struct StudentAverage stdavg_t;
 
 student_t *newStudent(unsigned long);
-student_t *getStudent(unsigned long id);
 course_t *newCourse(unsigned int, int);
 stdavg_t *newStudentAverage(double, unsigned long);
 
+student_t *getStudent(unsigned long id);
+void addCourse(student_t *, course_t *);
+int changeGrade(unsigned long, course_t *, int);
 double calcAverage(student_t *);
 void printStudent(student_t *);

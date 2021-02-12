@@ -4,6 +4,7 @@
 #include "binTree.h"
 #include "bool.h"
 #include "hash.h"
+#include "heap.h"
 #include "student.h"
 
 #define MAX_GRADE 100
@@ -11,6 +12,7 @@
 
 extern int STUDENT_MAP_SIZE;
 extern bnode_t *students[];
+extern heap_t *avgHeap;
 
 student_t *newStudent(unsigned long studentID) {
   // Allocate memory for a new student.
@@ -63,7 +65,7 @@ double calcAverage(student_t *st) {
   int amountOfCourses = st->coursesNum;
   course_t **courses = st->courses->data;
 
-  if (amountOfCourses <= 0)
+  if (amountOfCourses <= 0 || !courses)
     return gradesSummary;
 
   for (int i = 0; i < amountOfCourses; i++) {
@@ -72,6 +74,45 @@ double calcAverage(student_t *st) {
   }
 
   return gradesSummary / amountOfCourses;
+}
+
+void addCourse(student_t *st, course_t *c) {
+  // Assign a course to a student
+  const int REALLOC_STEP = 10;
+  array_course *courses = st->courses;
+
+  if (st->coursesNum < (courses->totalSize - 1)) {
+    int newSize = courses->totalSize + REALLOC_STEP;
+    courses->data = realloc(courses->data, newSize);
+    courses->totalSize = newSize;
+  }
+
+  courses->data[st->coursesNum] = c;
+  st->coursesNum++;
+
+  double newAverage = calcAverage(st);
+
+  heapUpdate(avgHeap, st, newAverage);
+}
+
+int changeGrade(unsigned long stID, course_t *c, int newGrade) {
+  // Change the grade of a student in a certain course
+  course_t *tmp;
+  struct Student *st = getStudent(stID);
+  int numOfCourses = st->coursesNum;
+
+  for (int i = 0; i < numOfCourses; i++) {
+    tmp = st->courses->data[i];
+    if (tmp->id == c->id) {
+      tmp->grade = newGrade;
+      double newAverage = calcAverage(st);
+
+      heapUpdate(avgHeap, st, newAverage);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void printCourse(course_t *c) {
@@ -91,4 +132,11 @@ void printStudent(student_t *st) {
       printCourse(st->courses->data[i]);
     }
   }
+
+  struct StudentAverage *average = getByIndex(avgHeap, st->heapPosition);
+
+  if (!average)
+    printf("No Average\n");
+  else
+    printf("Average: %lf\n", average->data);
 }

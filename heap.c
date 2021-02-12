@@ -17,13 +17,15 @@ void freeHeap(heap_t *h) {
   free(h);
 }
 
-void initHeap(heap_t *heap, int capacity) {
+heap_t *initHeap(heap_t *heap, int capacity) {
   if (!heap)
     heap = malloc(sizeof(struct Heap));
 
   heap->data = calloc(sizeof(stdavg_t *), capacity);
   heap->capacity = capacity;
   heap->size = 0;
+
+  return heap;
 }
 
 // Including this function here and not inside main.c
@@ -81,7 +83,7 @@ void heapifyUp(heap_t *heap, int i) {
 }
 
 void heapifyDown(heap_t *heap, int i) {
-  if (i > heap->size)
+  if (i >= (heap->size - 1))
     return updateAllHeapPositions(heap);
 
   int leftRightMax = maxStdAvgInIndex(heap->data, heapLeft(i), heapRight(i));
@@ -116,14 +118,25 @@ int heapInsert(heap_t *heap, stdavg_t *key) {
   return i;
 }
 
+stdavg_t *getByIndex(heap_t *heap, int position) {
+  if (position == DOES_NOT_EXIST_IN_HEAP)
+    return NULL;
+
+  return heap->data[position];
+}
+
 void heapUpdate(heap_t *heap, student_t *student, double newValue) {
   // Change the average of certain student, reorganizes the heap.
+  if (!heap)
+    return;
+
   int studentAvgIndex = student->heapPosition;
 
   if (studentAvgIndex == DOES_NOT_EXIST_IN_HEAP)
     return;
 
   struct StudentAverage *currentAvg = heap->data[studentAvgIndex];
+
   double oldValue = currentAvg->data;
 
   currentAvg->data = newValue;

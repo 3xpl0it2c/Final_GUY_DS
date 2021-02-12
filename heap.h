@@ -10,8 +10,9 @@ struct Heap {
 void heapifyUp(heap_t *, int);
 void heapifyDown(heap_t *, int);
 int heapInsert(heap_t *, stdavg_t *);
-void updateHeapPos(unsigned long, int);
-void initHeap(heap_t *, int);
-void printStdAvg(stdavg_t *);
 void heapUpdate(heap_t *, student_t *, double);
+stdavg_t *getByIndex(heap_t *, int);
+void updateHeapPos(unsigned long, int);
+heap_t *initHeap(heap_t *, int);
+void printStdAvg(stdavg_t *);
 void printHeap(heap_t *);

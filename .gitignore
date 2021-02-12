@@ -2,3 +2,5 @@ tags
 *.out
 *.o
 *.core
+# This is the executable's name.
+final_project
