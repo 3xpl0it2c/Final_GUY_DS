@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DOES_NOT_EXIST_IN_HEAP -1
 #define heapRight(i) ((i * 2) + 2)
 #define heapLeft(i) ((i * 2) + 1)
 #define heapParent(i) ((i - 1) / 2)
@@ -16,16 +17,24 @@ void freeHeap(heap_t *h) {
   free(h);
 }
 
-void initHeap(heap_t *h, int capacity) {
-  h->data = calloc(sizeof(stdavg_t *), capacity);
-  h->capacity = capacity;
-  h->size = 0;
+void initHeap(heap_t *heap, int capacity) {
+  if (!heap)
+    heap = malloc(sizeof(struct Heap));
+
+  heap->data = calloc(sizeof(stdavg_t *), capacity);
+  heap->capacity = capacity;
+  heap->size = 0;
 }
 
+// Including this function here and not inside main.c
+// Or even inside student.c saves us from caring to update the heap manually.
+// Therefore, although in theory this seems weird,
+// We pay this price for better DX & less "Forgot to updateHeapPos() !" bugs.
 void updateHeapPos(unsigned long id, int newHeapPos) {
   struct Student *s = getStudent(id);
 
-  if (s) s->heapPosition = newHeapPos;
+  if (s)
+    s->heapPosition = newHeapPos;
 }
 
 void updateAllHeapPositions(heap_t *heap) {
@@ -107,13 +116,30 @@ int heapInsert(heap_t *heap, stdavg_t *key) {
   return i;
 }
 
+void heapUpdate(heap_t *heap, student_t *student, double newValue) {
+  // Change the average of certain student, reorganizes the heap.
+  int studentAvgIndex = student->heapPosition;
+
+  if (studentAvgIndex == DOES_NOT_EXIST_IN_HEAP)
+    return;
+
+  struct StudentAverage *currentAvg = heap->data[studentAvgIndex];
+  double oldValue = currentAvg->data;
+
+  currentAvg->data = newValue;
+
+  if (newValue > oldValue)
+    heapifyUp(heap, studentAvgIndex);
+  else
+    heapifyDown(heap, studentAvgIndex);
+}
+
 // For debugging, mainly.
 void printStdAvg(stdavg_t *avg) {
   printf("Average for student with id: %lu\n", avg->id);
   printf("Average: %lf\n", avg->data);
 }
 
-// For debugging, mainly.
 void printHeap(heap_t *heap) {
   for (int i = 0; i < heap->size; i++) {
     printStdAvg(heap->data[i]);

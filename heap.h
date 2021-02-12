@@ -13,3 +13,5 @@ int heapInsert(heap_t *, stdavg_t *);
 void updateHeapPos(unsigned long, int);
 void initHeap(heap_t *, int);
 void printStdAvg(stdavg_t *);
+void heapUpdate(heap_t *, student_t *, double);
+void printHeap(heap_t *);
