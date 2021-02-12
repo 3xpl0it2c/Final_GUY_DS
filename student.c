@@ -136,7 +136,7 @@ void printStudent(student_t *st) {
   struct StudentAverage *average = getByIndex(avgHeap, st->heapPosition);
 
   if (!average)
-    printf("No Average\n");
+    printf("Average: %lf\n", calcAverage(st));
   else
     printf("Average: %lf\n", average->data);
 }
